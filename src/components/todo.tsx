@@ -14,17 +14,21 @@ const Todo: React.FC = () => {
 
   const getUserData = () => {
     const currentUser = localStorage.getItem('logedUser');
-    let data = JSON.parse(localStorage.getItem(currentUser));
+    let temp = currentUser?localStorage.getItem(currentUser):'{}';
+    let data = temp ? JSON.parse(temp) : null;
     return data;
   }
 
   useEffect(() => {
-    if(localStorage.getItem('logedUser') === null){
+    if(localStorage.getItem('logedUser') == null){
       history.push('/login');
     }
-    let data = getUserData();
-    console.log(data.tasks);
-    setTodos(data.tasks);
+    else if(localStorage.getItem('logedUser')){
+
+      let data = getUserData();
+      //console.log(data.tasks);
+      setTodos(data.tasks);
+    }
   },[])
 
   useEffect(() => {
@@ -39,7 +43,7 @@ const Todo: React.FC = () => {
       data.tasks.push({ id: Date.now(), text: task, isdone: false });
       console.log(data);
       const currentUser = localStorage.getItem('logedUser');
-      localStorage.setItem(currentUser, JSON.stringify(data));
+      currentUser&&localStorage.setItem(currentUser, JSON.stringify(data));
       //setTask('');
       setTodos(data.tasks);
     }
@@ -50,7 +54,7 @@ const Todo: React.FC = () => {
     let data = getUserData();
     data.tasks = temp
     const currentUser = localStorage.getItem('logedUser');
-    localStorage.setItem(currentUser, JSON.stringify(data));
+    currentUser&&localStorage.setItem(currentUser, JSON.stringify(data));
     setTodos(temp);
   };
 
@@ -65,7 +69,7 @@ const Todo: React.FC = () => {
     let data = getUserData();
     data.tasks = temp
     const currentUser = localStorage.getItem('logedUser');
-    localStorage.setItem(currentUser, JSON.stringify(data));
+    currentUser&&localStorage.setItem(currentUser, JSON.stringify(data));
     setTodos(temp);
   };
 
